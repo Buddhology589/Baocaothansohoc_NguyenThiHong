@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải Mã Thần Số Học: Nguyễn Thị Hồng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Warm Neutrals (Stone, Sand, Burnt Orange, Charcoal) -->
+    <!-- Application Structure Plan: 
+         1. Hero Section: Emotional connection, Intro, Big Life Path Number (3).
+         2. The Core Matrix: 3x3 Grid showing Birth Chart Visualization.
+         3. Deep Dive Cards: Destiny, Soul, Personality numbers with expand/collapse interaction.
+         4. Timeline Analysis: Chart.js Line graph showing Personal Year cycles (Past/Present/Future).
+         5. The 4 Peaks: Visual timeline of life milestones.
+         This structure moves from "Who am I?" (Static) to "Where am I going?" (Dynamic).
+    -->
+    
+    <!-- Visualization & Content Choices:
+         - Life Path: Large Typographic Hero -> Emphasis on Identity.
+         - Birth Chart: CSS Grid 3x3 -> Replicates the Pitago Matrix without SVGs.
+         - Personal Years: Chart.js Line Chart -> Shows the "Wave" of life energy (Rise/Fall).
+         - Milestones: Flexbox Layout -> Linear progression of time.
+         - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #f5f5f4; /* Stone-100 */
+            color: #292524; /* Stone-800 */
+        }
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 350px;
+            margin: 0 auto;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .number-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .number-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        /* Matrix Grid Styles */
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 2px;
+            background-color: #d6d3d1; /* Grid lines color */
+            border: 2px solid #78716c;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        .matrix-cell {
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #a8a29e; /* Default empty color */
+            position: relative;
+        }
+        .matrix-cell.active {
+            color: #ea580c; /* Orange-600 */
+            font-weight: 800;
+        }
+        .matrix-cell .count {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 0.7rem;
+            background: #f5f5f4;
+            padding: 2px 6px;
+            border-radius: 999px;
+            color: #57534e;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col items-center">
+
+    <!-- Navbar -->
+    <nav class="w-full bg-stone-800 text-stone-100 py-4 px-6 shadow-md fixed top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="font-bold text-xl tracking-wider uppercase">Numerology <span class="text-orange-400">Analysis</span></div>
+            <div class="text-sm opacity-80 hidden md:block">Nguyễn Thị Hồng - 12/05/2002</div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="w-full max-w-6xl mt-20 p-4 md:p-8 space-y-12 mb-20">
+
+        <!-- Section 1: Hero & Identity -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            <!-- Left: Intro Text -->
+            <div class="lg:col-span-7 flex flex-col justify-center space-y-6">
+                <div class="inline-block bg-orange-100 text-orange-800 px-4 py-1 rounded-full text-sm font-semibold w-max">
+                    Báo cáo Phân tích Chuyên sâu
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl text-stone-800 leading-tight">
+                    Xin chào, <br><span class="text-orange-600 italic serif">Nguyễn Thị Hồng</span>
+                </h1>
+                <p class="text-lg text-stone-600 leading-relaxed">
+                    Chào mừng bạn đến với bản đồ thiết kế cuộc đời mình. Dựa trên ngày sinh <strong>12/05/2002</strong> và tên của bạn, chúng tôi đã giải mã những con số bí ẩn đằng sau tính cách, sứ mệnh và vận trình tương lai của bạn.
+                </p>
+                <div class="p-6 bg-white border-l-4 border-orange-500 shadow-sm rounded-r-lg">
+                    <p class="font-medium text-stone-700">
+                        "Bạn mang trong mình năng lượng của sự sáng tạo và ngôn từ. Cuộc đời bạn là một sân khấu, và bạn chính là người truyền cảm hứng."
+                    </p>
+                </div>
+            </div>
+
+            <!-- Right: The Life Path Number (Big Card) -->
+            <div class="lg:col-span-5">
+                <div class="h-full bg-gradient-to-br from-stone-800 to-stone-700 text-white rounded-2xl p-8 flex flex-col justify-between shadow-xl relative overflow-hidden">
+                    <!-- Decorative Circle -->
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-orange-500 rounded-full opacity-20 blur-2xl"></div>
+                    
+                    <div>
+                        <h3 class="text-stone-300 uppercase tracking-widest text-sm font-semibold">Số Chủ Đạo (Life Path)</h3>
+                        <div class="flex items-baseline mt-2">
+                            <span class="text-8xl md:text-9xl font-bold serif text-orange-400">3</span>
+                            <span class="ml-4 text-xl opacity-80">Người Truyền Cảm Hứng</span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 mt-8 z-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                            <p class="text-sm md:text-base text-stone-200">Hoạt ngôn, vui vẻ, sáng tạo & nghệ thuật.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                            <p class="text-sm md:text-base text-stone-200">Tư duy nhạy bén, thông minh và linh hoạt.</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 bg-orange-400 rounded-full"></div>
+                            <p class="text-sm md:text-base text-stone-200">Dễ bị phân tán năng lượng và tùy hứng.</p>
+                        </div>
+                    </div>
+
+                    <button onclick="scrollToSection('analysis')" class="mt-8 py-3 px-6 bg-orange-600 hover:bg-orange-500 text-white rounded-lg font-medium transition w-full md:w-auto text-center">
+                        Xem chi tiết
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: The Core Numbers (Destiny, Soul, Personality) -->
+        <section id="analysis" class="space-y-6">
+            <div class="border-b border-stone-300 pb-4 mb-6">
+                <h2 class="text-2xl font-bold text-stone-800">Bộ Số Cốt Lõi</h2>
+                <p class="text-stone-500">Những yếu tố tạo nên con người bên trong và bên ngoài của bạn.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Card 1: Soul Number -->
+                <div class="number-card bg-white p-6 rounded-xl shadow-md border border-stone-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">L</div>
+                        <span class="text-4xl font-serif text-stone-800" id="soul-num">5</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-700 mb-2">Chỉ Số Linh Hồn (Soul)</h3>
+                    <p class="text-sm text-stone-600 flex-grow">
+                        Khao khát sâu thẳm bên trong bạn là sự <strong>tự do</strong>. Bạn không thích sự ràng buộc, lặp lại. Bạn mong muốn được trải nghiệm, khám phá những điều mới lạ và thể hiện cảm xúc chân thật.
+                    </p>
+                </div>
+
+                <!-- Card 2: Personality Number -->
+                <div class="number-card bg-white p-6 rounded-xl shadow-md border border-stone-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">N</div>
+                        <span class="text-4xl font-serif text-stone-800" id="person-num">9</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-700 mb-2">Chỉ Số Nhân Cách</h3>
+                    <p class="text-sm text-stone-600 flex-grow">
+                        Ấn tượng bạn để lại cho người khác là một người <strong>bao dung, trách nhiệm</strong> và có lý tưởng cao đẹp. Mọi người nhìn thấy ở bạn sự tin cậy và đôi khi là sự nghiêm túc, chín chắn.
+                    </p>
+                </div>
+
+                <!-- Card 3: Destiny Number -->
+                <div class="number-card bg-white p-6 rounded-xl shadow-md border border-stone-100 flex flex-col">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 font-bold">S</div>
+                        <span class="text-4xl font-serif text-stone-800" id="destiny-num">5</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-stone-700 mb-2">Chỉ Số Sứ Mệnh</h3>
+                    <p class="text-sm text-stone-600 flex-grow">
+                        Nhiệm vụ của bạn khi đến cuộc đời này là trở thành một <strong>người cải cách, mở đường</strong>. Bạn cần học cách thích nghi với sự thay đổi và sử dụng năng lượng tự do để tạo ra sự đột phá.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Birth Chart Visualization -->
+        <section class="bg-white rounded-2xl shadow-lg p-6 md:p-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <!-- Left: The Chart -->
+                <div class="flex flex-col items-center justify-center">
+                    <h2 class="text-xl font-bold text-stone-800 mb-6 uppercase tracking-wider">Biểu Đồ Ngày Sinh</h2>
+                    <div class="matrix-grid shadow-inner" id="birth-matrix">
+                        <!-- Cells generated by JS -->
+                    </div>
+                    <p class="mt-4 text-xs text-stone-400 italic">Dựa trên ngày sinh: 12/05/2002</p>
+                </div>
+
+                <!-- Right: Analysis Text -->
+                <div class="flex flex-col justify-center space-y-6">
+                    <div>
+                        <h3 class="text-xl font-serif text-orange-700 font-bold mb-2">Phân Tích Biểu Đồ</h3>
+                        <p class="text-stone-600 mb-4">
+                            Biểu đồ ngày sinh tiết lộ những thế mạnh bẩm sinh và những bài học bạn cần lấp đầy.
+                        </p>
+                    </div>
+
+                    <div id="chart-insights" class="space-y-4">
+                        <!-- Dynamic Insights inserted here -->
+                        <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-stone-400">
+                            <h4 class="font-bold text-stone-800">Trí Tuệ & Kế Hoạch (Mũi tên 1-2-3)</h4>
+                            <p class="text-sm text-stone-600 mt-1">Bạn có số 1 và 2, thiếu số 3 trong ngày sinh. Bạn có cái tôi và trực giác, nhưng cần rèn luyện thêm về khả năng phân tích và trí nhớ chi tiết.</p>
+                        </div>
+                        <div class="bg-stone-50 p-4 rounded-lg border-l-4 border-stone-400">
+                             <h4 class="font-bold text-stone-800">Trục Tinh Thần (2-5-8)</h4>
+                             <p class="text-sm text-stone-600 mt-1">Bạn sở hữu số 2 và 5. Đây là trục cảm xúc mạnh mẽ. Việc thiếu số 8 cho thấy bạn đôi khi để cảm xúc chi phối quá nhiều, cần cân bằng và thực tế hơn.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The 4 Peaks (Milestones) -->
+        <section class="space-y-6">
+            <div class="flex flex-col md:flex-row justify-between items-end border-b border-stone-300 pb-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-800">4 Đỉnh Cao Cuộc Đời</h2>
+                    <p class="text-stone-500 mt-1">Lộ trình phát triển và các giai đoạn vàng của bạn.</p>
+                </div>
+                <div class="hidden md:block text-stone-400 text-sm">Age Cycle</div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Peak 1 -->
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden group hover:bg-orange-50 transition">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-serif font-bold group-hover:opacity-20 transition">1</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-widest mb-1">Giai đoạn 1 (Đến 27 tuổi)</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-2">Số 8</div>
+                    <p class="text-sm text-stone-600">Đỉnh cao của sự độc lập tài chính và trí tuệ. Đây là giai đoạn bạn xây dựng nền tảng vật chất vững chắc.</p>
+                    <div class="mt-4 text-xs font-mono text-stone-400 bg-stone-100 inline-block px-2 py-1 rounded">Năm 2029</div>
+                </div>
+
+                <!-- Peak 2 -->
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden group hover:bg-orange-50 transition">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-serif font-bold group-hover:opacity-20 transition">2</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-widest mb-1">Giai đoạn 2 (27-36 tuổi)</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-2">Số 7</div>
+                    <p class="text-sm text-stone-600">Giai đoạn của trải nghiệm và bài học sâu sắc. Bạn sẽ trưởng thành vượt bậc qua những thử thách thực tế.</p>
+                    <div class="mt-4 text-xs font-mono text-stone-400 bg-stone-100 inline-block px-2 py-1 rounded">Năm 2038</div>
+                </div>
+
+                <!-- Peak 3 -->
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden group hover:bg-orange-50 transition">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-serif font-bold group-hover:opacity-20 transition">3</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-widest mb-1">Giai đoạn 3 (36-45 tuổi)</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-2">Số 6</div>
+                    <p class="text-sm text-stone-600">Đỉnh cao của sự sáng tạo và yêu thương. Gia đình hoặc cộng đồng sẽ là trọng tâm phát triển của bạn.</p>
+                    <div class="mt-4 text-xs font-mono text-stone-400 bg-stone-100 inline-block px-2 py-1 rounded">Năm 2047</div>
+                </div>
+
+                <!-- Peak 4 -->
+                <div class="glass-panel p-6 rounded-xl relative overflow-hidden group hover:bg-orange-50 transition">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl font-serif font-bold group-hover:opacity-20 transition">4</div>
+                    <div class="text-sm text-stone-500 uppercase tracking-widest mb-1">Giai đoạn 4 (Sau 45 tuổi)</div>
+                    <div class="text-3xl font-bold text-stone-800 mb-2">Số 9</div>
+                    <p class="text-sm text-stone-600">Giai đoạn phụng sự và nhân đạo. Thành công đến từ việc cho đi và giúp đỡ cộng đồng.</p>
+                    <div class="mt-4 text-xs font-mono text-stone-400 bg-stone-100 inline-block px-2 py-1 rounded">Năm 2056</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Personal Year Forecast (Interactive Graph) -->
+        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-stone-800">Dòng Chảy Năng Lượng (Vận Niên)</h2>
+                    <p class="text-stone-500">Dự báo năng lượng từng năm của bạn trong chu kỳ 9 năm hiện tại.</p>
+                </div>
+                <!-- Simple Legend/Stat -->
+                <div class="mt-4 md:mt-0 bg-orange-50 px-4 py-2 rounded-lg border border-orange-200">
+                    <span class="text-sm text-orange-800">Năm hiện tại (2026): </span>
+                    <span class="font-bold text-orange-600 text-lg">Năm Số 9</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="energyChart"></canvas>
+            </div>
+
+            <div class="mt-6 p-4 bg-stone-50 rounded-lg border border-stone-200" id="year-insight">
+                <h4 class="font-bold text-stone-800 mb-2">Năm 2026 - Số Cá Nhân 9: Năm Của Sự Kết Thúc & Gieo Hạt</h4>
+                <p class="text-sm text-stone-600">Đây là năm khép lại một chu kỳ 9 năm cũ. Đã đến lúc buông bỏ những gì không còn phù hợp (công việc cũ, mối quan hệ độc hại, thói quen xấu). Hãy dọn dẹp tâm trí để chuẩn bị cho sự khởi đầu mới đầy mạnh mẽ vào năm sau (Năm số 1).</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-stone-400 text-sm py-8 border-t border-stone-200">
+            <p>© 2026 Numerology Report for Nguyễn Thị Hồng. Built with Data & Heart.</p>
+        </footer>
+
+    </main>
+
+    <script>
+        // --- DATA LAYER ---
+        const userProfile = {
+            name: "Nguyễn Thị Hồng",
+            dob: "12/05/2002",
+            numbers: {
+                lifePath: 3, // 1+2+0+5+2+0+0+2 = 12 -> 3
+                day: 3,      // 1+2 = 3
+                month: 5,
+                year: 4,     // 2+0+0+2 = 4
+                attitude: 8, // Day(3) + Month(5) = 8
+                soul: 5,     // Vowels: U, E, I, O (Nguyen Thi Hong) -> 5
+                personality: 9, // Consonants -> 9
+                destiny: 5      // Soul(5) + Personality(9) = 14 -> 5
+            },
+            birthMatrix: [
+                { num: 3, count: 0 }, { num: 6, count: 0 }, { num: 9, count: 0 },
+                { num: 2, count: 2 }, { num: 5, count: 1 }, { num: 8, count: 0 },
+                { num: 1, count: 1 }, { num: 4, count: 0 }, { num: 7, count: 0 }
+            ],
+            // Personal Year Cycle for 2023-2031
+            cycleData: [
+                { year: 2023, personalYear: 6, impact: "Gia đình & Sáng tạo" },
+                { year: 2024, personalYear: 7, impact: "Học hỏi & Trải nghiệm" },
+                { year: 2025, personalYear: 8, impact: "Tài chính & Độc lập" },
+                { year: 2026, personalYear: 9, impact: "Kết thúc & Buông bỏ" },
+                { year: 2027, personalYear: 1, impact: "Khởi đầu mới" },
+                { year: 2028, personalYear: 2, impact: "Kết nối & Hòa bình" },
+                { year: 2029, personalYear: 3, impact: "Học tập & Chia sẻ" },
+                { year: 2030, personalYear: 4, impact: "Củng cố nền tảng" },
+                { year: 2031, personalYear: 5, impact: "Tự do & Thay đổi" }
+            ]
+        };
+
+        // --- RENDER FUNCTIONS ---
+
+        // 1. Render Birth Matrix (Biểu đồ ngày sinh)
+        // Matrix layout in Pitago chart:
+        // 3 6 9
+        // 2 5 8
+        // 1 4 7
+        function renderBirthMatrix() {
+            const container = document.getElementById('birth-matrix');
+            const layoutOrder = [3, 6, 9, 2, 5, 8, 1, 4, 7]; // Visual order for CSS Grid
+            
+            layoutOrder.forEach(num => {
+                const data = userProfile.birthMatrix.find(n => n.num === num);
+                const cell = document.createElement('div');
+                cell.className = `matrix-cell ${data.count > 0 ? 'active' : ''}`;
+                
+                // Content logic: show number if count > 0, else empty or ghost
+                if (data.count > 0) {
+                    // Repeat the number based on count (e.g., "22")
+                    cell.innerText = String(num).repeat(data.count);
+                    
+                    // Add count badge
+                    const countBadge = document.createElement('span');
+                    countBadge.className = 'count';
+                    countBadge.innerText = `x${data.count}`;
+                    cell.appendChild(countBadge);
+                } else {
+                    cell.innerText = num;
+                    cell.style.opacity = '0.1'; // Ghost number
+                }
+                
+                container.appendChild(cell);
+            });
+        }
+
+        // 2. Render Personal Year Chart (Chart.js)
+        function renderCycleChart() {
+            const ctx = document.getElementById('energyChart').getContext('2d');
+            
+            // Highlight current year (2026)
+            const currentYearIndex = userProfile.cycleData.findIndex(d => d.year === 2026);
+            
+            const bgColors = userProfile.cycleData.map((d, i) => 
+                i === currentYearIndex ? 'rgba(234, 88, 12, 0.8)' : 'rgba(168, 162, 158, 0.3)'
+            );
+            const borderColors = userProfile.cycleData.map((d, i) => 
+                i === currentYearIndex ? '#ea580c' : '#78716c'
+            );
+            const pointRadii = userProfile.cycleData.map((d, i) => 
+                i === currentYearIndex ? 8 : 4
+            );
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: userProfile.cycleData.map(d => d.year),
+                    datasets: [{
+                        label: 'Năng Lượng Năm Cá Nhân',
+                        data: userProfile.cycleData.map(d => d.personalYear),
+                        borderColor: '#a8a29e',
+                        borderWidth: 2,
+                        backgroundColor: bgColors,
+                        pointBackgroundColor: borderColors,
+                        pointRadius: pointRadii,
+                        pointHoverRadius: 10,
+                        fill: true,
+                        tension: 0.4, // Smooth curve
+                        segment: {
+                            borderColor: ctx => {
+                                // Gradient logic or conditional coloring could go here
+                                return '#d6d3d1';
+                            }
+                        }
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(41, 37, 36, 0.9)',
+                            titleFont: { family: 'Quicksand', size: 14 },
+                            bodyFont: { family: 'Quicksand', size: 13 },
+                            padding: 10,
+                            callbacks: {
+                                label: function(context) {
+                                    const yearData = userProfile.cycleData[context.dataIndex];
+                                    return `Năm số ${yearData.personalYear}: ${yearData.impact}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 10,
+                            grid: { color: '#e7e5e4' },
+                            ticks: { stepSize: 1, font: { family: 'Quicksand' } }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Quicksand' } }
+                        }
+                    },
+                    onClick: (e, activeEls) => {
+                        if (activeEls.length > 0) {
+                            const index = activeEls[0].index;
+                            updateYearInsight(index);
+                        }
+                    }
+                }
+            });
+        }
+
+        // 3. Helper: Update Text when Chart is clicked
+        function updateYearInsight(index) {
+            const data = userProfile.cycleData[index];
+            const container = document.getElementById('year-insight');
+            container.innerHTML = `
+                <h4 class="font-bold text-stone-800 mb-2 transition-all">
+                    Năm ${data.year} - Số Cá Nhân ${data.personalYear}: ${data.impact}
+                </h4>
+                <p class="text-sm text-stone-600">
+                    ${getAdviceForYear(data.personalYear)}
+                </p>
+            `;
+            container.classList.add('bg-orange-50', 'border-orange-200');
+            setTimeout(() => {
+                container.classList.remove('bg-orange-50', 'border-orange-200');
+            }, 500);
+        }
+
+        function getAdviceForYear(num) {
+            const advice = {
+                1: "Năm gieo hạt. Hãy bắt đầu những dự án mới, đặt mục tiêu độc lập. Đừng ngại thử thách.",
+                2: "Năm kết nối. Hãy kiên nhẫn, lắng nghe trực giác và phát triển các mối quan hệ ngoại giao.",
+                3: "Năm mở rộng. Hãy học tập, chia sẻ kiến thức và để trí não được sáng tạo tự do.",
+                4: "Năm củng cố. Hãy tập trung vào chi tiết, kỷ luật và sức khỏe. Xây dựng nền móng vững chắc.",
+                5: "Năm thay đổi. Hãy đón nhận sự tự do, du lịch hoặc thay đổi môi trường sống/làm việc.",
+                6: "Năm gia đình. Hãy quay về chăm sóc tổ ấm và những người thân yêu. Trách nhiệm là từ khóa.",
+                7: "Năm nội tâm. Hãy dành thời gian một mình để chiêm nghiệm, học hỏi sâu và phát triển tâm linh.",
+                8: "Năm thành tựu. Đây là lúc thu hoạch kết quả tài chính và khẳng định vị thế cá nhân.",
+                9: "Năm buông bỏ. Hãy dọn dẹp quá khứ, tha thứ và chuẩn bị tâm thế rỗng rang cho chu kỳ mới."
+            };
+            return advice[num] || "Hãy lắng nghe bản thân.";
+        }
+
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBirthMatrix();
+            renderCycleChart();
+            
+            // Ensure Chart Container sizing
+            const chartDiv = document.querySelector('.chart-container');
+            // Force styles via JS if needed, but CSS class handles it mostly.
+        });
+
+    </script>
+</body>
+</html>
